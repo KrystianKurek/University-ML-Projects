@@ -3,32 +3,15 @@
 This repository contains the code for my Machine Learning projects completed as part of my bachelor studies at the university.
 
 ## Description
-Here is short description of each of the folders - one folder contains project(s) done for one course.
+Each folder in this repository contains the projects I completed for a specific course, along with relevant 
+exercises and implementations. Here's a brief overview of each folder:
 
-- advanced-machine-learning
-  
-    This folder contains two projects that my [friend](https://github.com/kalinajazdzyk) and I completed together. 
-  - The first project involves implementing logistic regression with four different optimizers: gradient descent, stochastic gradient descent, ADAM, and iterative weighted least squares. 
-  - The second project involves exploring various feature selection methods to identify important features in a dataset provided by our lecturer.
+- **advanced-machine-learning**: This folder contains two projects completed in collaboration with my [friend](https://github.com/kalinajazdzyk). The first project involves implementing logistic regression with different optimizers, while the second project explores feature selection methods for identifying important features in a dataset. Additionally, I have also uploaded exercises that I completed during my classes, which involve implementing and using various machine learning methods.
+- **big-data**: In collaboration with three friends, I created an end-to-end solution using the Apache framework.
+- **deep-learning**: I implemented three convolutional neural network architectures using different data augmentation techniques.
+- **machine-learning-on-graphs**: In collaboration with my [friend](https://github.com/gozderamichal), we implemented the [diff2vec](https://arxiv.org/abs/2001.07463) algorithm for node embeddings and enhanced it with auto-encoders and a Contrastive Loss.
 
-  Additionally, I have also uploaded exercises that I completed during my classes, which involve implementing and using various machine learning methods.
-- big-data
-    
-     Me and three of my friends created end2end solution using Apache framework. 
-- deep-learning
-    
-   I've implemented three convolutional neural networks architectures with different data augmentation techniques.
-- machine-learning-on-graphs
-
-   Together with my [friend](https://github.com/gozderamichal) we've implemented [diff2vec](https://arxiv.org/abs/2001.07463) (for extracting node embeddings) algorithm and tried to enhance it with auto-encoders with additional Contrastive Loss. 
-- polish-coin-detection
-    
-    My [friend](https://github.com/mateuszkierznowski) and I created a small dataset of Polish coins, including their bounding boxes and values. We then implemented several classifiers and detection mechanism using this dataset.
-- time-series-classification
-  
-  To pass this course, I implemented the rocket algorithm for time series classification as described in this [paper](https://arxiv.org/abs/1910.13051).
-- web-scrapping 
-
-  Additionally, [here](https://github.com/OpenCS-ontology/csis-annals-scraper) is a public repository of a computer science ontology to which my [friend](https://github.com/mateuszkierznowski) and I contributed.
-    
-
+- **polish-coin-detection**: My [friend](https://github.com/mateuszkierznowski) and I created a small dataset of Polish coins, including their bounding boxes and values. We then implemented several classifiers and detection mechanism using this dataset.
+- **time-series-classification**: For this course, I implemented the rocket algorithm for time series classification as described in this [paper](https://arxiv.org/abs/1910.13051).
+- **web-scrapping**: In addition, my [friend](https://github.com/mateuszkierznowski) and I contributed to a public repository of a computer 
+science ontology, which can be found [here](https://github.com/OpenCS-ontology/csis-annals-scraper).
