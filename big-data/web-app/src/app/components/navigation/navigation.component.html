@@ -1,0 +1,44 @@
+<mat-sidenav-container class="sidenav-container">
+    <mat-sidenav #drawer class="sidenav shadowed" fixedInViewport="true"
+        [attr.role]="(isHandset$ | async) ? 'dialog' : 'navigation'" [mode]="(isHandset$ | async) ? 'over' : 'side'"
+        [opened]="!(isHandset$ | async)" (click)="handleClick()">
+        <mat-divider></mat-divider>
+        <mat-nav-list class="center headers menulist">
+            <!-- <a mat-list-item routerLink="main" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">{{'mainModuleName' | translate}}</a>
+            <a mat-list-item routerLink="cities" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">{{'citiesModuleName' | translate}}</a> -->
+            <a mat-list-item routerLink="map" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">{{'mapName' | translate}}</a>
+            <a mat-list-item routerLink="mre" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact: true}">{{'mre' | translate}}</a>
+            <mat-divider></mat-divider>
+            <mat-divider></mat-divider>
+            <mat-divider></mat-divider>
+            <mat-action-list>
+                <button mat-list-item (click)="openPopup('pm10')">PM10</button>
+                <button mat-list-item (click)="openPopup('pm25')">PM2.5</button>
+                <button mat-list-item (click)="openPopup('no2')">NO<div class="app-sub">2</div></button>
+                <button mat-list-item (click)="openPopup('o3')">O<div class="app-sub">3</div></button>
+            </mat-action-list>
+        </mat-nav-list>
+        <mat-divider></mat-divider>
+
+        <div class="lang-buttons-div">
+            <mat-button-toggle-group class="lang-buttons" #group="matButtonToggleGroup">
+                <mat-button-toggle (click)="setPL()">
+                    PL
+                </mat-button-toggle>
+                <mat-button-toggle (click)="setEN()">
+                    EN
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+        </div>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <mat-toolbar class="headers center shadowed app-title">
+            <span>{{'appName' | translate}}</span>
+        </mat-toolbar>
+        <ng-content></ng-content>
+    </mat-sidenav-content>
+</mat-sidenav-container>

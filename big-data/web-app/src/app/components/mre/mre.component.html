@@ -1,0 +1,31 @@
+<div class="mre-container">
+    <div class="mre-frame">
+        <div class="aa_htmlTable">
+            <h3 style="text-align: center;">{{'mre' | translate}}</h3>
+            <div>
+                <table style="width: 60%">
+                    <thead>
+                        <tr>
+                            <!-- <th style="width:250px;">{{'timestamp' | translate}}</th> -->
+                            <th>{{'particle' | translate}}</th>
+                            <th>{{'interval' | translate}}</th>
+                            <th width="40%">{{'mre' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let batchRecord of mres">
+                            <!-- <td>{{batchRecord.timestamp}}</td> -->
+                            <td>{{batchRecord.particle}}</td>
+                            <td>{{transformInterval(batchRecord.interval)}}</td>
+                            <td width="40%">{{roundMRE(batchRecord.MRE)}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div>
+            <button class="button-18" mat-stroked-button (click)="getMREsData()">{{'refresh' | translate}}</button>
+        </div>
+    </div>
+    
+</div>

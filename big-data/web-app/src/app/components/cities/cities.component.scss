@@ -1,0 +1,116 @@
+.wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu-container {
+    flex: 1;
+    margin-top: 100px;
+    margin-bottom: 20px;
+    padding: 30px;
+    background: white;
+
+    form {
+        display: flex;
+        flex-wrap: wrap;
+
+        .country-item {
+            flex: 1 1 100%;
+        }
+
+        .parameter-item {
+            padding-right: 25px;
+
+            flex: 1 1 50%;
+        }
+
+        .time-item {
+            flex: 1 1 50%;
+            display: flex;
+            align-self: baseline;
+
+            mat-button-toggle {
+                flex: 1 1 50%;
+            }
+        }
+
+        .date-pickers {
+            flex: 1;
+            display: flex;
+
+            .picker-from {
+                padding-right: 25px;
+                flex: 1 1 50%;
+            }
+
+            .picker-to {
+                flex: 1 1 50%;
+            }
+        }
+
+        .go-button-item {
+            flex: 1 1 100%;
+            margin-bottom: 20px;
+        }
+    }
+}
+
+.spinner {
+    margin: auto;
+}
+
+.grid-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+    .units {
+        margin: 5px;
+        align-self: flex-end;
+        color: grey;
+        font-size: 60%;
+    }
+
+    .mat-table {
+        width: 100%;
+    }
+}
+
+@media (max-width: 450px) {
+    .menu-container {
+        form {
+            .country-item {
+                padding-right: 0px;
+                flex: 1 1 50%;
+            }
+
+            .parameter-item {
+                padding-right: 0px;
+                flex: 1 1 50%;
+            }
+
+            .date-pickers {
+                flex-wrap: wrap;
+
+                .picker-from {
+                    padding-right: 0px;
+                    flex: 1 1 50%;
+                }
+
+                .picker-to {
+                    flex: 1 1 50%;
+                }
+            }
+
+            .go-button-item {
+                flex: 1 1 100%;
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+        }
+    }
+}

@@ -1,0 +1,185 @@
+version: '3.5'
+services:
+
+  mock-api:
+    build: mock-api
+    container_name: mock-air-api
+    ports:
+      - "5000:1337"
+
+  nifi:
+    build: nifi
+    container_name: nifi
+    ports:
+      - "8443:8443"
+    depends_on:
+      - nifi-registry
+    environment:
+      - SINGLE_USER_CREDENTIALS_USERNAME=admin
+      - SINGLE_USER_CREDENTIALS_PASSWORD=adminadminadmin
+      - OPENWEATHER_API_KEY=${OPENWEATHER_API_KEY}
+
+  nifi-registry:
+    container_name: nifi-registry
+    image: apache/nifi-registry
+    ports:
+      - "18080:18080"
+    volumes:
+      - ./nifi-registry/database:/opt/nifi-registry/nifi-registry-current/database
+      - ./nifi-registry/flow_storage:/opt/nifi-registry/nifi-registry-current/flow_storage
+
+  namenode:
+    build: hadoop/namenode
+    container_name: namenode
+    hostname: namenode
+    volumes:
+      - ./hadoop/namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=test
+    env_file:
+      - ./hadoop/hadoop-hive.env
+    ports:
+      - "9870:9870"
+
+  datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: datanode
+    volumes:
+      - ./hadoop/datanode:/hadoop/dfs/data
+    env_file:
+      - ./hadoop/hadoop-hive.env
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    depends_on:
+      - namenode
+    ports:
+      - "9864:9864"
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:6.1.1
+    container_name: zookeeper-kafka
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: '2181'
+
+  # reachable on 9092 from the host and on 29092 from inside docker compose
+  kafka:
+    image: confluentinc/cp-kafka:6.1.1
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - '9092:9092'
+    expose:
+      - '29092'
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: '1'
+      KAFKA_MIN_INSYNC_REPLICAS: '1'
+
+  init-kafka:
+    image: confluentinc/cp-kafka:6.1.1
+    container_name: init-kafka
+    depends_on:
+      - kafka
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server kafka:29092 --list
+
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic air-data --replication-factor 1 --partitions 1
+      kafka-topics --bootstrap-server kafka:29092 --create --if-not-exists --topic weather-data --replication-factor 1 --partitions 1
+
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server kafka:29092 --list
+      "
+
+  spark-master:
+    build: spark
+    image: bde2020/spark-master:3.2.1-hadoop3.2
+    container_name: spark-master
+    depends_on:
+      - namenode
+      - datanode
+    # environment:
+    #   - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
+    volumes:
+      - ./spark/base_models_learning:/home/base_models_learning
+    ports:
+      - '8888:8080'
+
+  spark-worker-1:
+    image: bde2020/spark-worker:3.2.1-hadoop3.2
+    container_name: spark-worker-1
+    volumes:
+      - ./spark/base_models_learning:/home/base_models_learning
+    depends_on:
+      - spark-master
+      - namenode
+      - datanode
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_DRIVER_MEMORY=1G
+      - SPARK_EXECUTOR_MEMORY=1G
+    ports:
+      - '8889:8081'
+
+  spark-worker-2:
+    image: bde2020/spark-worker:3.2.1-hadoop3.2
+    container_name: spark-worker-2
+    depends_on:
+      - spark-master
+      - namenode
+      - datanode
+    volumes:
+      - ./spark/base_models_learning:/home/base_models_learning
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+      - SPARK_WORKER_CORES=1
+      - SPARK_WORKER_MEMORY=1G
+      - SPARK_DRIVER_MEMORY=1G
+      - SPARK_EXECUTOR_MEMORY=1G
+    ports:
+      - '8890:8081'
+
+  web-app:
+    build: web-app
+    image: apache-air-web
+    container_name: web-app
+    ports:
+      - 4200:4200
+
+  flask-server:
+    build: server
+    image: flask-server
+    container_name: flask-server
+    depends_on: 
+      - init-cassandra
+    volumes:
+      - ./server/flask_api.py:/python-docker/flask_api.py
+    ports:
+      - "5001:1337"
+
+  cassandra:
+      image: cassandra:latest
+      container_name: cassandra
+      ports:
+        - "9042:9042"
+
+  init-cassandra:
+      container_name: init-cassandra
+      image: cassandra:latest
+      depends_on:
+        - cassandra
+      volumes:
+        - ./cassandra/schema.cql:/schema.cql
+        - ./cassandra/init.sh:/init.sh
+      command: /init.sh

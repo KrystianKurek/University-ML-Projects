@@ -1,0 +1,56 @@
+{
+  "appName": "Apache Air Web App",
+
+  "mainModuleName": "Stan powietrza",
+  "citiesModuleName": "Ranking miast",
+  "mapName": "Mapa",
+  "map-not-implemented": "Komponent Mapy nie został jeszcze zaimplementowany",
+
+  
+  "country": "Kraj",
+  "city": "Miasto",
+  "location": "Lokalizacja",
+  "parameter": "Zanieczyszczenie",
+
+  "dateRangeNow": "Obecnie",
+  "dateRangeCalendar": "Kalendarz",
+  "chooseDateFrom": "Od",
+  "chooseDateTo": "Do",
+
+
+  "goButton": "Wyświetl!",
+  "refresh": "Odśwież",
+  "notProvided": "Brak pomiarów",
+  "date": "Data",
+  "mre": "Średnie błędy względne",
+  "timestamp": "Data",
+  "particle": "Cząstka",
+  "interval": "Przedział",
+
+  "airMessage": "Stan powietrza:",
+  "messageGood": "Dobry",
+  "messageModerate": "Umiarkowany",
+  "messageUnhealthySensitive": "Szkodliwy dla wrażliwych grup",
+  "messageUnhealthy": "Niezdrowy",
+  "messageVeryUnhealthy": "Bardzo niezdrowy",
+  "messageHazardous": "Niebezpieczny",
+  "messageVeryHazardous": "Bardzo niebezpieczny",
+  "messageOutOfRange": "Poza skalą",
+
+  "wikiLink": "Źródło: Wikipedia. Dowiedz się więcej!",
+
+  "pm25": "Pył",
+  "pm10": "Pył ",
+  "o3": "Ozon",
+  "bc": "Czarny węgiel",
+  "co": "Tlenek węgla",
+  "no2": "Dwutlenek azotu",
+  "so2": "Dwutlenek siarki",
+
+  "error": "Błąd połączenia z API",
+  "errorNoData": "Brak danych",
+  "errorAction": "Zamknij",
+
+  "unitsMessage": "Jednostki: "
+  
+}

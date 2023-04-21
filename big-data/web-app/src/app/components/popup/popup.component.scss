@@ -1,0 +1,25 @@
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: visible;
+  
+
+  .popup-header {
+    flex: 0 1 auto;
+    justify-self: flex-start;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  title {
+    flex: 0 1 auto;
+    margin-top: 1rem;
+    padding-left: 20px;
+  }
+
+  p {
+    padding: 20px;
+    padding-bottom: 30px;
+    flex: 1 1 auto;
+  }
+}

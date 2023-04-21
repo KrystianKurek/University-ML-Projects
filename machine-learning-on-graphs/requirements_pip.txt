@@ -1,0 +1,12 @@
+tensorflow-estimator
+numpy
+pandas==1.1.1
+h5py
+scikit-learn
+notebook
+networkx
+tqdm
+matplotlib
+tensorflow-probability==0.13.*
+numba
+gensim

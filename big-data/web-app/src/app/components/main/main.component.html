@@ -1,0 +1,193 @@
+<!-- <div class="wrapper">
+    <div class="menu-container shadowed">
+        <form [formGroup]="pollutionForm" novalidate (ngSubmit)="onGoClick()">
+            <mat-form-field class="country-item">
+                <mat-label>{{'country' | translate}}</mat-label>
+                <mat-select (selectionChange)="onCountrySelected($event)" formControlName="country">
+                    <mat-option *ngFor="let country of countries" [value]="country.code">
+                        {{country.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="city-item">
+                <mat-label>{{'city' | translate}}</mat-label>
+                <mat-select (selectionChange)="onCitySelected($event)" formControlName="city">
+                    <mat-option *ngFor="let city of cities" [value]="city.city">
+                        {{city.city}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="location-item">
+                <mat-label>{{'location' | translate}}</mat-label>
+                <mat-select formControlName="location">
+                    <mat-option *ngFor="let location of locations" [value]="location.location">
+                        {{location.location}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-button-toggle-group (change)="onDateToggleChange()" class="time-item" #dateGroup="matButtonToggleGroup"
+                formControlName="dateType">
+                <mat-button-toggle value="now" aria-label="Now">
+                    {{'dateRangeNow' | translate}}
+                </mat-button-toggle>
+                <mat-button-toggle value="dateRange" aria-label="Date picker">
+                    {{'dateRangeCalendar' | translate}}
+                </mat-button-toggle>
+            </mat-button-toggle-group>
+
+            <div class="date-pickers" *ngIf="showDatePicker == true">
+                <mat-form-field class="picker-from">
+                    <input matInput [matDatepicker]="fromDatePicker" placeholder="{{'chooseDateFrom' | translate}}"
+                        formControlName="fromDate">
+                    <mat-datepicker-toggle matSuffix [for]="fromDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #fromDatePicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field class="picker-to">
+                    <input matInput [matDatepicker]="toDatePicker" placeholder="{{'chooseDateTo' | translate}}"
+                        formControlName="toDate">
+                    <mat-datepicker-toggle matSuffix [for]="toDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #toDatePicker></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <button mat-stroked-button type="submit" class="go-button-item" [disabled]="isLoading">{{'goButton' |
+                translate}}</button>
+        </form>
+    </div>
+
+    <mat-progress-spinner class="spinner" mode="indeterminate" *ngIf="isLoading"></mat-progress-spinner>
+
+    <div class="grid-container">
+        <p class="units" *ngIf="archiveView === false && latestPollutionGridDataSource.length > 0">{{'unitsMessage'
+            | translate}} μg/m<sup>3</sup></p>
+        <table *ngIf="archiveView === false && latestPollutionGridDataSource.length > 0" mat-table
+            [dataSource]="latestPollutionGridDataSource" matSort matSortDisabled class="mat-elevation-z8">
+            <ng-container matColumnDef="{{dateColumn}}">
+                <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header> {{'date' | translate}}
+                </th>
+                <td class="date-column" mat-cell *matCellDef="let element"> {{element.getLocaleDateTime()}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{bcColumn}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> BC </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.bc ?
+                    element.bc.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{coColumn}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> CO </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.co ?
+                    element.co.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{no2Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> NO<div class="app-sub">2
+                    </div>
+                </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.no2 ?
+                    element.no2.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{o3Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> O<div class="app-sub">3
+                    </div>
+                </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.o3 ?
+                    element.o3.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{pm10Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> PM10 </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.pm10 ?
+                    element.pm10.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{pm25Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> PM2.5 </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.pm25 ?
+                    element.pm25.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{so2Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> SO<div class="app-sub">2
+                    </div>
+                </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.so2 ?
+                    element.so2.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="latestPollutionGridColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: latestPollutionGridColumns;"></tr>
+        </table>
+
+        <div *ngIf="archiveView === false && measurementGridDataSource.length > 0">
+            <app-pollution-warning [warnings]="warnings"></app-pollution-warning>
+        </div>
+
+        <p class="units" *ngIf="measurementGridDataSourceAngularMaterial.data.length > 0">{{'unitsMessage' |
+            translate}} μg/m<sup>3</sup></p>
+        <table *ngIf="measurementGridDataSourceAngularMaterial.data.length > 0" mat-table
+            [dataSource]="measurementGridDataSourceAngularMaterial" matSort (matSortChange)="onMatSortChange($event)"
+            matSortDisableClear matSortStart="desc" class="mat-elevation-z8">
+            <ng-container matColumnDef="{{dateColumn}}">
+                <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+                <td class="date-column" mat-cell *matCellDef="let element"> {{element.getLocaleDateTime()}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{bcColumn}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> BC </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.bc ?
+                    element.bc.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{coColumn}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> CO </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.co ?
+                    element.co.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{no2Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> NO<div class="app-sub">2
+                    </div>
+                </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.no2 ?
+                    element.no2.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{o3Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> O<div class="app-sub">3
+                    </div>
+                </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.o3 ?
+                    element.o3.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{pm10Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> PM10 </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.pm10 ?
+                    element.pm10.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{pm25Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> PM2.5 </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.pm25 ?
+                    element.pm25.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="{{so2Column}}">
+                <th class="parameter-column" mat-header-cell *matHeaderCellDef mat-sort-header> SO<div class="app-sub">2
+                    </div>
+                </th>
+                <td class="parameter-column" mat-cell *matCellDef="let element"> {{element.so2 ?
+                    element.so2.getStringValue(1) : null}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="measurementGridGridColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: measurementGridGridColumns;"></tr>
+        </table>
+    </div>
+</div> -->
