@@ -10,4 +10,4 @@ extraction and classification methods, including:
 As it was required to implement classical methods of feature extraction and classification, we 
 couldn't use deep learning methods such as YOLO.
 
-To see an example of working detection check `run.ipynb` notebook.
+To see an example of working detection check `demo.ipynb` notebook.
